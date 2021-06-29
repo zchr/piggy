@@ -39,7 +39,9 @@ export const AddAccount = () => {
 					type='submit'
 					onClick={(e) => {
 						e.preventDefault();
-						dispatch(addAccount({ name, description, value: 0 }));
+						setName('');
+						setDescription('');
+						dispatch(addAccount({ name, description }));
 					}}
 					disabled={name.length === 0}
 				>

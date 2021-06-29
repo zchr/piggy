@@ -1,16 +1,16 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import { AddAccount } from './accounts/components/AddAccount';
-import { AccountCardList } from './accounts/components/AccountCardList';
-import { Counter } from './counter/Counter';
+import { AccountList } from './accounts/components/AccountList';
+import { Nav } from './accounts/components/Nav';
 
 function App() {
 	return (
 		<div>
-			<Counter />
+			<Nav />
 			<Container>
 				<AddAccount />
-				<AccountCardList />
+				<AccountList />
 			</Container>
 		</div>
 	);
