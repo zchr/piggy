@@ -5,7 +5,7 @@ interface AccountState {
 }
 
 export interface InvestmentState {
-    dateAdded: string;
+    date: number;
     cashAdded: number;
     totalValue: number;
 }

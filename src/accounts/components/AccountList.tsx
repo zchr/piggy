@@ -23,9 +23,14 @@ const AccountListInternal = (props: Props) => {
 						? undefined
 						: account.investments[countInvestments - 1];
 				return (
-					<Card key={`account-${i}`}>
-						<Card.Header>
-							{account.name} | {previousInvestment?.totalValue}
+					<Card key={`account-${i}`} className='mb-3'>
+						<Card.Header className='d-flex justify-content-between'>
+							<div>
+								<h3>{account.name}</h3>
+								{previousInvestment && (
+									<p>Total value: {previousInvestment.totalValue}</p>
+								)}
+							</div>
 							<Accordion.Toggle
 								as={Button}
 								variant='link'
@@ -36,7 +41,6 @@ const AccountListInternal = (props: Props) => {
 						</Card.Header>
 						<Accordion.Collapse eventKey={`account-${i}`}>
 							<Card.Body>
-								{' '}
 								<AccountCard accountId={i} accountMetadata={account} />
 							</Card.Body>
 						</Accordion.Collapse>

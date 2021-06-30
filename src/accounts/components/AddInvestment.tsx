@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector as selector } from '../../app/hooks';
 import { addInvestment } from '../reducers/AccountReducer';
 
 interface Props {
@@ -17,6 +17,10 @@ export const AddInvestment = (props: Props) => {
 	const [cashAdded, setCashAdded] = useState<number | null>(null);
 	const [totalValue, setTotalValue] = useState<number | null>(null);
 
+	const isFirstInvestment = selector(
+		(state) => state.account.accounts[accountId].investments.length === 0
+	);
+
 	return (
 		<>
 			<Modal show={isAddingInvestment} onHide={setIsAddingInvestment}>
@@ -29,25 +33,42 @@ export const AddInvestment = (props: Props) => {
 							<Form.Label>Cash added</Form.Label>
 							<Form.Control
 								type='number'
-								value={cashAdded || undefined}
+								value={cashAdded === null ? '' : cashAdded}
 								onChange={(e) => {
-									const newValue = parseFloat(e.target.value);
-									setCashAdded(isNaN(newValue) ? null : newValue);
+									const raw = e.target.value;
+
+									if (raw !== '') {
+										const newValue = parseFloat(e.target.value);
+										if (!isNaN(newValue)) {
+											setCashAdded(newValue);
+										}
+									} else {
+										setCashAdded(null);
+									}
 								}}
 							/>
 							<Form.Text className='text-muted'>
-								The amount of cash that you added to this account since the last
-								investment that you recorded
+								{isFirstInvestment
+									? 'If you know (roughly) the total amount of cash that you have added in the lifetime of your account, you may enter it here. Otherwise, enter the total account value in both of these boxes.'
+									: 'The amount of cash that you added to this account since the last investment that you recorded'}
 							</Form.Text>
 						</Form.Group>
 						<Form.Group className='mb-3'>
 							<Form.Label>New total value</Form.Label>
 							<Form.Control
 								type='number'
-								value={totalValue || undefined}
+								value={totalValue === null ? '' : totalValue}
 								onChange={(e) => {
-									const newValue = parseFloat(e.target.value);
-									setTotalValue(isNaN(newValue) ? null : newValue);
+									const raw = e.target.value;
+
+									if (raw !== '') {
+										const newValue = parseFloat(e.target.value);
+										if (!isNaN(newValue)) {
+											setTotalValue(newValue);
+										}
+									} else {
+										setTotalValue(null);
+									}
 								}}
 							/>
 							<Form.Text className='text-muted'>
@@ -64,7 +85,7 @@ export const AddInvestment = (props: Props) => {
 									addInvestment({
 										accountId,
 										investment: {
-											dateAdded: JSON.stringify(new Date()),
+											date: new Date().getTime(),
 											cashAdded: cashAdded!,
 											totalValue: totalValue!,
 										},
