@@ -14,6 +14,9 @@ export const AddInvestment = (props: Props) => {
 	const dispatch = useAppDispatch();
 
 	const { accountId, isAddingInvestment, setIsAddingInvestment } = props;
+	const [investmentDate, setInvestmentDate] = useState<string>(
+		new Date().toISOString().split('T')[0]
+	);
 	const [cashAdded, setCashAdded] = useState<number | null>(null);
 	const [totalValue, setTotalValue] = useState<number | null>(null);
 
@@ -29,6 +32,23 @@ export const AddInvestment = (props: Props) => {
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
+						<Form.Group className='mb-3'>
+							<Form.Label>Investment date</Form.Label>
+							<Form.Control
+								type='date'
+								value={investmentDate}
+								onChange={(e) => {
+									const raw = e.target.value;
+
+									setInvestmentDate(raw);
+								}}
+							/>
+							<Form.Text className='text-muted'>
+								{isFirstInvestment
+									? 'If you know (roughly) the total amount of cash that you have added in the lifetime of your account, you may enter it here. Otherwise, enter the total account value in both of these boxes.'
+									: 'The amount of cash that you added to this account since the last investment that you recorded'}
+							</Form.Text>
+						</Form.Group>
 						<Form.Group className='mb-3'>
 							<Form.Label>Cash added</Form.Label>
 							<Form.Control
@@ -85,7 +105,7 @@ export const AddInvestment = (props: Props) => {
 									addInvestment({
 										accountId,
 										investment: {
-											date: new Date().getTime(),
+											date: new Date(investmentDate).getTime(),
 											cashAdded: cashAdded!,
 											totalValue: totalValue!,
 										},

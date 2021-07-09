@@ -13,6 +13,7 @@ export const AddAccount = (props: Props) => {
 	const { isAddingAccount, setIsAddingAccount } = props;
 	const [name, setName] = useState<string>('');
 	const [description, setDescription] = useState<string>('');
+	const [isCash, setIsCash] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
 
 	return (
@@ -45,6 +46,14 @@ export const AddAccount = (props: Props) => {
 								Optionally include a description of how you use your account
 							</Form.Text>
 						</Form.Group>
+						<Form.Group className='mb-3'>
+							<Form.Check
+								type='checkbox'
+								label='This is a cash account'
+								checked={isCash}
+								onChange={(e) => setIsCash(e.target.checked)}
+							/>
+						</Form.Group>
 						<Button
 							variant='primary'
 							type='submit'
@@ -52,7 +61,7 @@ export const AddAccount = (props: Props) => {
 								e.preventDefault();
 								setName('');
 								setDescription('');
-								dispatch(addAccount({ name, description }));
+								dispatch(addAccount({ name, description, isCash }));
 							}}
 							disabled={name.length === 0}
 						>

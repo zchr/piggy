@@ -13,6 +13,7 @@ export interface InvestmentState {
 export interface AccountMetadataState {
     name: string;
     description: string | undefined;
+    isCash: boolean;
     investments: InvestmentState[];
 }
 
@@ -24,7 +25,7 @@ const accountSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
-        addAccount: (state, action: { payload: { name: string, description: string | undefined } }) => {
+        addAccount: (state, action: { payload: { name: string, description: string | undefined, isCash: boolean } }) => {
             const accountMetadata = {
                 ...action.payload,
                 investments: []
@@ -33,11 +34,20 @@ const accountSlice = createSlice({
         },
         addInvestment: (state, action: { payload: { accountId: number, investment: InvestmentState } }) => {
             const { accountId, investment } = action.payload;
-            state.accounts[accountId].investments.push(investment);
+            const investments = state.accounts[accountId].investments;
+
+            investments.push(investment);
+            investments.sort((a, b) => a.date - b.date);
+
+            state.accounts[accountId].investments = investments;
+        },
+        deleteInvestment: (state, action: { payload: { accountId: number, investmentId: number } }) => {
+            const { accountId, investmentId } = action.payload;
+            state.accounts[accountId].investments.splice(investmentId, 1);
         }
     }
 });
 
-export const { addAccount, addInvestment } = accountSlice.actions;
+export const { addAccount, addInvestment, deleteInvestment } = accountSlice.actions;
 
 export default accountSlice.reducer;

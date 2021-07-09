@@ -1,13 +1,17 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import { LineChart, XAxis, YAxis, Line, Label } from 'recharts';
 import { useAppSelector as useSelector } from '../../app/hooks';
+import { deleteInvestment } from '../reducers/AccountReducer';
+import { useAppDispatch } from '../../app/hooks';
 
 interface Props {
 	accountId: number;
 }
 
 export const InvestmentList = (props: Props) => {
+	const dispatch = useAppDispatch();
+
 	const { accountId } = props;
 
 	const investments = useSelector(
@@ -15,17 +19,14 @@ export const InvestmentList = (props: Props) => {
 	);
 
 	const twr = (investmentId: number) => {
-		if (investmentId === 0) {
-			return 1;
-		}
-
 		const current = investments[investmentId];
-		const previous = investments[investmentId - 1];
+		const previousTotalValue =
+			investmentId === 0 ? 0 : investments[investmentId - 1].totalValue;
 
 		return (
 			1 +
-			(current.totalValue - previous.totalValue - current.cashAdded) /
-				(previous.totalValue + current.cashAdded)
+			(current.totalValue - previousTotalValue - current.cashAdded) /
+				(previousTotalValue + current.cashAdded)
 		);
 	};
 
@@ -41,6 +42,9 @@ export const InvestmentList = (props: Props) => {
 		};
 	});
 
+	const daysOfAccount = data.length > 0 ? data[data.length - 1].days : 365;
+	const annualizedTwr = (1 + totalTwr) ** (365.0 / daysOfAccount) - 1;
+
 	// Run back through the investments to calculate cumulative cash added
 	for (let i = 1; i < investments.length; i++) {
 		const current = data[i];
@@ -52,6 +56,7 @@ export const InvestmentList = (props: Props) => {
 	return (
 		<>
 			<p>Time-weighted return: {totalTwr}</p>
+			<p>Annualized return: {annualizedTwr}</p>
 			<LineChart width={700} height={300} data={data} className='mb-3'>
 				<XAxis dataKey='days' type='number' domain={['0', 'dataMax']}>
 					<Label
@@ -70,7 +75,7 @@ export const InvestmentList = (props: Props) => {
 						<th>Date</th>
 						<th>Cash added</th>
 						<th>Account value</th>
-						<th>Time-weighted return</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -79,7 +84,16 @@ export const InvestmentList = (props: Props) => {
 							<td>{new Date(investment.date).toDateString()}</td>
 							<td>{investment.cashAdded}</td>
 							<td>{investment.totalValue}</td>
-							<td>{twrs[i]}</td>
+							<td>
+								<Button
+									onClick={() =>
+										dispatch(deleteInvestment({ accountId, investmentId: i }))
+									}
+									variant='outline-danger'
+								>
+									Delete
+								</Button>
+							</td>
 						</tr>
 					))}
 				</tbody>

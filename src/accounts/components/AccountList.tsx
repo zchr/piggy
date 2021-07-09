@@ -28,7 +28,7 @@ const AccountListInternal = (props: Props) => {
 							<div>
 								<h3>{account.name}</h3>
 								{previousInvestment && (
-									<p>Total value: {previousInvestment.totalValue}</p>
+									<p>Total value: ${previousInvestment.totalValue}</p>
 								)}
 							</div>
 							<Accordion.Toggle
