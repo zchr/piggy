@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Table } from 'react-bootstrap';
-import { LineChart, XAxis, YAxis, Line, Label } from 'recharts';
 import { useAppSelector as useSelector } from '../../app/hooks';
 import { deleteInvestment } from '../reducers/AccountReducer';
 import { useAppDispatch } from '../../app/hooks';
+import { Graph } from '../../core/components/Graph';
 
 interface Props {
 	accountId: number;
@@ -36,13 +36,16 @@ export const InvestmentList = (props: Props) => {
 	const firstInvestmentDate = investments.length > 0 ? investments[0].date : 0;
 	const data = investments.map((i) => {
 		return {
-			days: (i.date - firstInvestmentDate) / (24 * 60 * 60 * 1000),
+			date: i.date,
 			cashAdded: i.cashAdded,
 			totalValue: i.totalValue,
 		};
 	});
 
-	const daysOfAccount = data.length > 0 ? data[data.length - 1].days : 365;
+	const daysOfAccount =
+		data.length > 0
+			? (data[data.length - 1].date - data[0].date) / (24 * 60 * 60 * 1000)
+			: 365;
 	const annualizedTwr = (1 + totalTwr) ** (365.0 / daysOfAccount) - 1;
 
 	// Run back through the investments to calculate cumulative cash added
@@ -57,18 +60,7 @@ export const InvestmentList = (props: Props) => {
 		<>
 			<p>Time-weighted return: {totalTwr}</p>
 			<p>Annualized return: {annualizedTwr}</p>
-			<LineChart width={700} height={300} data={data} className='mb-3'>
-				<XAxis dataKey='days' type='number' domain={['0', 'dataMax']}>
-					<Label
-						value='Days since first (tracked) investment'
-						offset={0}
-						position='insideBottom'
-					/>
-				</XAxis>
-				<YAxis />
-				<Line type='monotone' dataKey='cashAdded' stroke='#8884d8' />
-				<Line type='monotone' dataKey='totalValue' stroke='#82ca9d' />
-			</LineChart>
+			<Graph data={data} lines={['cashAdded', 'totalValue']} />
 			<Table striped bordered hover size='sm'>
 				<thead>
 					<tr>
