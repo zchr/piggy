@@ -32,8 +32,6 @@ export const InvestmentList = (props: Props) => {
 
 	const twrs = investments.map((_, i) => twr(i));
 	const totalTwr = twrs.reduce((prev, curr) => prev * curr, 1) - 1;
-
-	const firstInvestmentDate = investments.length > 0 ? investments[0].date : 0;
 	const data = investments.map((i) => {
 		return {
 			date: i.date,

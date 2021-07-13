@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const AccountCard = (props: Props) => {
-	const { name, description, isCash } = props.accountMetadata;
+	const { description, isCash } = props.accountMetadata;
 	const accountId = props.accountId;
 
 	const [isAddingInvestment, setIsAddingInvestment] = useState<boolean>(false);

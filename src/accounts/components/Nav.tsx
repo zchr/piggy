@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Button, Container } from 'react-bootstrap';
 import { useAppSelector as useSelector } from '../../app/hooks';
 import { AddAccount } from './AddAccount';
@@ -8,10 +8,16 @@ export const Nav = () => {
 
 	const state = useSelector((state) => state.account);
 
-	const save = (e: any) => {
-		e.preventDefault();
+	const save = (e: any | undefined) => {
+		if (e) {
+			e.preventDefault();
+		}
 		localStorage.setItem('accounts', JSON.stringify(state.accounts));
 	};
+
+	useEffect(() => {
+		return () => save(undefined);
+	}, [save]);
 
 	return (
 		<Navbar bg='light' expand='lg' className='mb-3'>
