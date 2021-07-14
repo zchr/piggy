@@ -83,7 +83,19 @@ export const Overview = () => {
 				<div className='mb-3 col-sm-3'>
 					<Card>
 						<Card.Header>
-							<div>Annual rate of return</div>
+							<div>Time-weighted return</div>
+						</Card.Header>
+						<Card.Body>
+							<div>
+								<h1>{(totalTwr * 100).toFixed(2)}%</h1>
+							</div>
+						</Card.Body>
+					</Card>
+				</div>
+				<div className='mb-3 col-sm-3'>
+					<Card>
+						<Card.Header>
+							<div>Annualized return</div>
 						</Card.Header>
 						<Card.Body>
 							<div>

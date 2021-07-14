@@ -24,7 +24,7 @@ export const Graph = (props: Props) => {
 					dataKey='date'
 					type='number'
 					domain={['0', 'dataMax']}
-					tickFormatter={(date) => new Date(date).toDateString()}
+					tickFormatter={(date) => new Date(date).toLocaleDateString()}
 				/>
 				<YAxis />
 				{lines.map((l, i) => (

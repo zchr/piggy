@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Card, Table } from 'react-bootstrap';
 import { useAppSelector as useSelector } from '../../app/hooks';
 import { deleteInvestment } from '../reducers/AccountReducer';
 import { useAppDispatch } from '../../app/hooks';
@@ -56,8 +56,32 @@ export const InvestmentList = (props: Props) => {
 
 	return (
 		<>
-			<p>Time-weighted return: {totalTwr}</p>
-			<p>Annualized return: {annualizedTwr}</p>
+			<div className='row'>
+				<div className='mb-3 col-sm-6'>
+					<Card>
+						<Card.Header>
+							<div>Time-weighted return</div>
+						</Card.Header>
+						<Card.Body>
+							<div>
+								<h1>{(totalTwr * 100).toFixed(2)}%</h1>
+							</div>
+						</Card.Body>
+					</Card>
+				</div>
+				<div className='mb-3 col-sm-6'>
+					<Card>
+						<Card.Header>
+							<div>Annualized return</div>
+						</Card.Header>
+						<Card.Body>
+							<div>
+								<h1>{(annualizedTwr * 100).toFixed(2)}%</h1>
+							</div>
+						</Card.Body>
+					</Card>
+				</div>
+			</div>
 			<Graph data={data} lines={['cashAdded', 'totalValue']} />
 			<Table striped bordered hover size='sm'>
 				<thead>
@@ -71,9 +95,9 @@ export const InvestmentList = (props: Props) => {
 				<tbody>
 					{investments.map((investment, i) => (
 						<tr key={`investment-${accountId}-${i}`}>
-							<td>{new Date(investment.date).toDateString()}</td>
-							<td>{investment.cashAdded}</td>
-							<td>{investment.totalValue}</td>
+							<td>{new Date(investment.date).toLocaleDateString()}</td>
+							<td>${investment.cashAdded}</td>
+							<td>${investment.totalValue}</td>
 							<td>
 								<Button
 									onClick={() =>

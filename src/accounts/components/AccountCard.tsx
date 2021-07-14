@@ -1,40 +1,49 @@
 import React, { useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { AccountMetadataState } from '../reducers/AccountReducer';
 import { AddInvestment } from './AddInvestment';
 import { InvestmentList } from './InvestmentList';
 
 interface Props {
-	accountId: number;
-	accountMetadata: AccountMetadataState;
+	accountId: number | undefined;
+	account: AccountMetadataState | undefined;
+	setIsShowingAccountDetails: () => void;
 }
 
 export const AccountCard = (props: Props) => {
-	const { description, isCash } = props.accountMetadata;
-	const accountId = props.accountId;
+	const { accountId, account, setIsShowingAccountDetails } = props;
 
 	const [isAddingInvestment, setIsAddingInvestment] = useState<boolean>(false);
 
-	return (
+	const isShowingAccountDetails = accountId !== undefined;
+
+	return account === undefined || accountId === undefined ? (
+		<></>
+	) : (
 		<>
-			<Card>
-				<Card.Body>
-					<Card.Text>
-						{description}
-						<br />
-						Account type: {isCash ? 'Cash' : 'Brokerage'}
-					</Card.Text>
-					<Button variant='primary' onClick={() => setIsAddingInvestment(true)}>
+			<Modal show={isShowingAccountDetails} onHide={setIsShowingAccountDetails}>
+				<Modal.Header>
+					<Modal.Title>{account.name}</Modal.Title>
+					<Button
+						variant='outline-success'
+						onClick={() => setIsAddingInvestment(true)}
+					>
 						Add investment
 					</Button>
-					<AddInvestment
-						accountId={accountId}
-						isAddingInvestment={isAddingInvestment}
-						setIsAddingInvestment={() => setIsAddingInvestment(false)}
-					/>
-					<InvestmentList accountId={accountId} />
-				</Card.Body>
-			</Card>
+					<Button variant='link' onClick={setIsShowingAccountDetails}>
+						Close
+					</Button>
+				</Modal.Header>
+				<Modal.Body>
+					<p>{account.description}</p>
+					<InvestmentList accountId={accountId!} />
+				</Modal.Body>
+			</Modal>
+			<AddInvestment
+				accountId={accountId}
+				isAddingInvestment={isAddingInvestment}
+				setIsAddingInvestment={() => setIsAddingInvestment(false)}
+			/>
 		</>
 	);
 };

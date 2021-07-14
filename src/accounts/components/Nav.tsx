@@ -16,8 +16,8 @@ export const Nav = () => {
 	};
 
 	useEffect(() => {
-		return () => save(undefined);
-	}, [save]);
+		save(undefined);
+	});
 
 	return (
 		<Navbar bg='light' expand='lg' className='mb-3'>

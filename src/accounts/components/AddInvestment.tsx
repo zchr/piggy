@@ -29,6 +29,9 @@ export const AddInvestment = (props: Props) => {
 			<Modal show={isAddingInvestment} onHide={setIsAddingInvestment}>
 				<Modal.Header>
 					<Modal.Title>Add investment</Modal.Title>
+					<Button variant='link' onClick={setIsAddingInvestment}>
+						Close
+					</Button>
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
@@ -96,32 +99,31 @@ export const AddInvestment = (props: Props) => {
 								have recently added)
 							</Form.Text>
 						</Form.Group>
-						<Button
-							variant='primary'
-							type='submit'
-							onClick={(e) => {
-								e.preventDefault();
-								dispatch(
-									addInvestment({
-										accountId,
-										investment: {
-											date: new Date(investmentDate).getTime(),
-											cashAdded: cashAdded!,
-											totalValue: totalValue!,
-										},
-									})
-								);
-								setIsAddingInvestment();
-							}}
-							disabled={cashAdded === null || totalValue === null}
-						>
-							Add
-						</Button>
 					</Form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant='secondary' onClick={setIsAddingInvestment}>
+					<Button variant='outline-secondary' onClick={setIsAddingInvestment}>
 						Cancel
+					</Button>
+					<Button
+						variant='primary'
+						onClick={(e) => {
+							e.preventDefault();
+							dispatch(
+								addInvestment({
+									accountId,
+									investment: {
+										date: new Date(investmentDate).getTime(),
+										cashAdded: cashAdded!,
+										totalValue: totalValue!,
+									},
+								})
+							);
+							setIsAddingInvestment();
+						}}
+						disabled={cashAdded === null || totalValue === null}
+					>
+						Add
 					</Button>
 				</Modal.Footer>
 			</Modal>
