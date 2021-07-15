@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/piggy/static/css/main.0a233e39.chunk.css",
+    "main.js": "/piggy/static/js/main.d4e7ad69.chunk.js",
+    "main.js.map": "/piggy/static/js/main.d4e7ad69.chunk.js.map",
+    "runtime-main.js": "/piggy/static/js/runtime-main.98edfde9.js",
+    "runtime-main.js.map": "/piggy/static/js/runtime-main.98edfde9.js.map",
+    "static/js/2.897c9760.chunk.js": "/piggy/static/js/2.897c9760.chunk.js",
+    "static/js/2.897c9760.chunk.js.map": "/piggy/static/js/2.897c9760.chunk.js.map",
+    "index.html": "/piggy/index.html",
+    "static/css/main.0a233e39.chunk.css.map": "/piggy/static/css/main.0a233e39.chunk.css.map",
+    "static/js/2.897c9760.chunk.js.LICENSE.txt": "/piggy/static/js/2.897c9760.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.98edfde9.js",
+    "static/js/2.897c9760.chunk.js",
+    "static/css/main.0a233e39.chunk.css",
+    "static/js/main.d4e7ad69.chunk.js"
+  ]
+}
