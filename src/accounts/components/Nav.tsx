@@ -6,7 +6,7 @@ import firebase from '../../firebase/auth';
 import { AuthModal } from '../../firebase/AuthModal';
 
 interface Props {
-	user: firebase.User | null;
+	user: string | null;
 }
 
 export const Nav = (props: Props) => {
@@ -20,10 +20,11 @@ export const Nav = (props: Props) => {
 		if (e) {
 			e.preventDefault();
 		}
+
 		localStorage.setItem('accounts', JSON.stringify(state.accounts));
 
-		if (user && user.uid) {
-			firebase.firestore().collection('users').doc(user.uid).set(state);
+		if (user && state.accounts.length > 0) {
+			firebase.firestore().collection('users').doc(user).set(state);
 		}
 	};
 

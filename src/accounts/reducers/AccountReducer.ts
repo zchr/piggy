@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface AccountState {
+export interface AccountState {
     accounts: AccountMetadataState[];
 }
 
@@ -25,6 +25,9 @@ const accountSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
+        setState: (state, action: { payload: { state: AccountState } }) => {
+            state.accounts = action.payload.state.accounts
+        },
         addAccount: (state, action: { payload: { name: string, description: string | undefined, isCash: boolean } }) => {
             const accountMetadata = {
                 ...action.payload,
@@ -48,6 +51,6 @@ const accountSlice = createSlice({
     }
 });
 
-export const { addAccount, addInvestment, deleteInvestment } = accountSlice.actions;
+export const { setState, addAccount, addInvestment, deleteInvestment } = accountSlice.actions;
 
 export default accountSlice.reducer;
