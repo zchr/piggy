@@ -15,7 +15,7 @@ export const InvestmentList = (props: Props) => {
 	const { accountId } = props;
 
 	const investments = useSelector(
-		(state) => state.account.accounts[accountId].investments
+		state => state.account.accounts[accountId].investments
 	);
 
 	const twr = (investmentId: number) => {
@@ -32,7 +32,7 @@ export const InvestmentList = (props: Props) => {
 
 	const twrs = investments.map((_, i) => twr(i));
 	const totalTwr = twrs.reduce((prev, curr) => prev * curr, 1) - 1;
-	const data = investments.map((i) => {
+	const data = investments.map(i => {
 		return {
 			date: i.date,
 			cashAdded: i.cashAdded,
@@ -44,7 +44,10 @@ export const InvestmentList = (props: Props) => {
 		data.length > 0
 			? (data[data.length - 1].date - data[0].date) / (24 * 60 * 60 * 1000)
 			: 365;
-	const annualizedTwr = (1 + totalTwr) ** (365.0 / daysOfAccount) - 1;
+	const annualizedTwr =
+		daysOfAccount < 365
+			? totalTwr
+			: (1 + totalTwr) ** (365.0 / daysOfAccount) - 1;
 
 	// Run back through the investments to calculate cumulative cash added
 	for (let i = 1; i < investments.length; i++) {

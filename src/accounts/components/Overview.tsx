@@ -5,13 +5,13 @@ import { Graph } from '../../core/components/Graph';
 import { InvestmentState } from '../reducers/AccountReducer';
 
 export const Overview = () => {
-	const accounts = useSelector((state) =>
-		state.account.accounts.filter((a) => a.investments.length > 0)
+	const accounts = useSelector(state =>
+		state.account.accounts.filter(a => a.investments.length > 0)
 	);
 
 	// Calculate twr across all investment accounts
 	const investments = accounts
-		.filter((a) => !a.isCash)
+		.filter(a => !a.isCash)
 		.reduce(
 			(prev: InvestmentState[], curr) => prev.concat(curr.investments),
 			[]
@@ -33,7 +33,7 @@ export const Overview = () => {
 	const twrs = investments.map((_, i) => twr(i));
 	const totalTwr = twrs.reduce((prev, curr) => prev * curr, 1) - 1;
 
-	const data = investments.map((i) => {
+	const data = investments.map(i => {
 		return {
 			date: i.date,
 			cashAdded: i.cashAdded,
@@ -60,7 +60,7 @@ export const Overview = () => {
 	}
 
 	// Calculate cash stats
-	const cashAccounts = accounts.filter((a) => a.isCash);
+	const cashAccounts = accounts.filter(a => a.isCash);
 
 	const cashInvestments = cashAccounts
 		.reduce(
@@ -70,7 +70,7 @@ export const Overview = () => {
 		.sort((a, b) => a.date - b.date);
 
 	const cash = cashAccounts
-		.map((a) =>
+		.map(a =>
 			a.investments.length > 0
 				? a.investments[a.investments.length - 1].totalValue
 				: 0
@@ -80,7 +80,7 @@ export const Overview = () => {
 	return (
 		<>
 			<div className='row'>
-				<div className='mb-3 col-sm-3'>
+				<div className='mb-3 col-sm-4'>
 					<Card>
 						<Card.Header>
 							<div>Time-weighted return</div>
@@ -92,7 +92,7 @@ export const Overview = () => {
 						</Card.Body>
 					</Card>
 				</div>
-				<div className='mb-3 col-sm-3'>
+				<div className='mb-3 col-sm-4'>
 					<Card>
 						<Card.Header>
 							<div>Annualized return</div>
@@ -104,7 +104,7 @@ export const Overview = () => {
 						</Card.Body>
 					</Card>
 				</div>
-				<div className='mb-3 col-sm-3'>
+				<div className='mb-3 col-sm-4'>
 					<Card>
 						<Card.Header>
 							<div>Cash on hand</div>

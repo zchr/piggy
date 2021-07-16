@@ -21,6 +21,9 @@ export const AddAccount = (props: Props) => {
 			<Modal show={isAddingAccount} onHide={setIsAddingAccount}>
 				<Modal.Header>
 					<Modal.Title>Add account</Modal.Title>
+					<Button variant='link' onClick={setIsAddingAccount}>
+						Close
+					</Button>
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
@@ -30,7 +33,7 @@ export const AddAccount = (props: Props) => {
 								type='text'
 								placeholder='Robinhood cash account'
 								value={name}
-								onChange={(e) => setName(e.target.value)}
+								onChange={e => setName(e.target.value)}
 							/>
 						</Form.Group>
 						<Form.Group className='mb-3'>
@@ -40,7 +43,7 @@ export const AddAccount = (props: Props) => {
 								type='text'
 								placeholder='Description'
 								value={description}
-								onChange={(e) => setDescription(e.target.value)}
+								onChange={e => setDescription(e.target.value)}
 							/>
 							<Form.Text className='text-muted'>
 								Optionally include a description of how you use your account
@@ -51,17 +54,18 @@ export const AddAccount = (props: Props) => {
 								type='checkbox'
 								label='This is a cash account'
 								checked={isCash}
-								onChange={(e) => setIsCash(e.target.checked)}
+								onChange={e => setIsCash(e.target.checked)}
 							/>
 						</Form.Group>
 						<Button
 							variant='primary'
 							type='submit'
-							onClick={(e) => {
+							onClick={e => {
 								e.preventDefault();
 								setName('');
 								setDescription('');
 								dispatch(addAccount({ name, description, isCash }));
+								setIsAddingAccount();
 							}}
 							disabled={name.length === 0}
 						>
