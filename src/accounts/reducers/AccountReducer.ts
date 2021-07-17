@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface AccountState {
     accounts: AccountMetadataState[];
+    saveLocally: boolean;
 }
 
 export interface InvestmentState {
@@ -19,6 +20,7 @@ export interface AccountMetadataState {
 
 const initialState: AccountState = {
     accounts: JSON.parse(localStorage.getItem('accounts') || '[]'),
+    saveLocally: true,
 }
 
 const accountSlice = createSlice({
@@ -27,6 +29,9 @@ const accountSlice = createSlice({
     reducers: {
         setState: (state, action: { payload: { state: AccountState } }) => {
             state.accounts = action.payload.state.accounts
+        },
+        setSaveLocally: (state, action: { payload: { saveLocally: boolean } }) => {
+            state.saveLocally = action.payload.saveLocally;
         },
         addAccount: (state, action: { payload: { name: string, description: string | undefined, isCash: boolean } }) => {
             const accountMetadata = {
@@ -51,6 +56,6 @@ const accountSlice = createSlice({
     }
 });
 
-export const { setState, addAccount, addInvestment, deleteInvestment } = accountSlice.actions;
+export const { setState, setSaveLocally, addAccount, addInvestment, deleteInvestment } = accountSlice.actions;
 
 export default accountSlice.reducer;

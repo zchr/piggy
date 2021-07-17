@@ -4,51 +4,64 @@ import { useAppSelector as useSelector } from '../../app/hooks';
 import { AddAccount } from './AddAccount';
 import firebase from '../../firebase/auth';
 import { AuthModal } from '../../firebase/AuthModal';
+import { useAppDispatch } from '../../app/hooks';
+import { setSaveLocally } from '../reducers/AccountReducer';
 
 interface Props {
 	user: string | null;
+	isAddingAccount: boolean;
+	setIsAddingAccount: (val: boolean) => void;
 }
 
 export const Nav = (props: Props) => {
-	const { user } = props;
-	const [isAddingAccount, setIsAddingAccount] = useState<boolean>(false);
+	const { user, isAddingAccount, setIsAddingAccount } = props;
+
 	const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
+	const dispatch = useAppDispatch();
 
 	const state = useSelector(state => state.account);
+	const saveLocally = useSelector(state => state.account.saveLocally);
 
-	const save = (e: any | undefined) => {
-		if (e) {
-			e.preventDefault();
-		}
-
-		localStorage.setItem('accounts', JSON.stringify(state.accounts));
-
-		if (user && state.accounts.length > 0) {
-			firebase.firestore().collection('users').doc(user).set(state);
-		}
+	const signOut = () => {
+		firebase
+			.auth()
+			.signOut()
+			.then(() => dispatch(setSaveLocally({ saveLocally: true })));
 	};
 
 	useEffect(() => {
-		save(undefined);
-	});
+		if (user && !saveLocally) {
+			firebase.firestore().collection('users').doc(user).set(state);
+		} else if (saveLocally) {
+			localStorage.setItem('accounts', JSON.stringify(state.accounts));
+		}
+	}, [saveLocally, user, state]);
 
 	return (
 		<Navbar bg='light' expand='lg' className='mb-3'>
 			<Container className='justify-content-between'>
 				<Button variant='primary' onClick={() => setIsAddingAccount(true)}>
-					Add account
+					Track a new account
 				</Button>
 				<div>
 					{user ? (
-						<Button className='mx-3' onClick={() => firebase.auth().signOut()}>
+						<Button
+							className='mx-3'
+							onClick={signOut}
+							variant='outline-primary'
+						>
 							Sign out
 						</Button>
 					) : (
-						<Button onClick={() => setIsAuthenticating(true)}>Sign in</Button>
+						<Button
+							className='mx-3'
+							onClick={() => setIsAuthenticating(true)}
+							variant='outline-primary'
+						>
+							Sign in
+						</Button>
 					)}
-					<Button variant='outline-success' onClick={save}>
-						Save
-					</Button>
+					{user ? 'Syncing to your account' : 'Saving locally'}
 				</div>
 			</Container>
 			<AuthModal

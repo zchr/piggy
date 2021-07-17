@@ -21,7 +21,7 @@ export const AddInvestment = (props: Props) => {
 	const [totalValue, setTotalValue] = useState<number | null>(null);
 
 	const isFirstInvestment = selector(
-		(state) => state.account.accounts[accountId].investments.length === 0
+		state => state.account.accounts[accountId].investments.length === 0
 	);
 
 	return (
@@ -40,24 +40,19 @@ export const AddInvestment = (props: Props) => {
 							<Form.Control
 								type='date'
 								value={investmentDate}
-								onChange={(e) => {
+								onChange={e => {
 									const raw = e.target.value;
 
 									setInvestmentDate(raw);
 								}}
 							/>
-							<Form.Text className='text-muted'>
-								{isFirstInvestment
-									? 'If you know (roughly) the total amount of cash that you have added in the lifetime of your account, you may enter it here. Otherwise, enter the total account value in both of these boxes.'
-									: 'The amount of cash that you added to this account since the last investment that you recorded'}
-							</Form.Text>
 						</Form.Group>
 						<Form.Group className='mb-3'>
 							<Form.Label>Cash added</Form.Label>
 							<Form.Control
 								type='number'
 								value={cashAdded === null ? '' : cashAdded}
-								onChange={(e) => {
+								onChange={e => {
 									const raw = e.target.value;
 
 									if (raw !== '') {
@@ -81,7 +76,7 @@ export const AddInvestment = (props: Props) => {
 							<Form.Control
 								type='number'
 								value={totalValue === null ? '' : totalValue}
-								onChange={(e) => {
+								onChange={e => {
 									const raw = e.target.value;
 
 									if (raw !== '') {
@@ -107,7 +102,7 @@ export const AddInvestment = (props: Props) => {
 					</Button>
 					<Button
 						variant='primary'
-						onClick={(e) => {
+						onClick={e => {
 							e.preventDefault();
 							dispatch(
 								addInvestment({

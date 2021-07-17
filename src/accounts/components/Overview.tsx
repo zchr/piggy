@@ -119,14 +119,26 @@ export const Overview = () => {
 			</div>
 			<div className='row'>
 				<div className='col-sm-6'>
-					<Graph
-						title={'Brokerage'}
-						data={data}
-						lines={['cashAdded', 'totalValue']}
-					/>
+					{investments.length === 0 ? (
+						<p>Add an investment to see metrics</p>
+					) : (
+						<Graph
+							title={'Brokerage'}
+							data={data}
+							lines={['cashAdded', 'totalValue']}
+						/>
+					)}
 				</div>
 				<div className='col-sm-6'>
-					<Graph title={'Cash'} data={cashInvestments} lines={['totalValue']} />
+					{cashInvestments.length === 0 ? (
+						<p>Add data about a cash account to see metrics</p>
+					) : (
+						<Graph
+							title={'Cash'}
+							data={cashInvestments}
+							lines={['totalValue']}
+						/>
+					)}
 				</div>
 			</div>
 		</>

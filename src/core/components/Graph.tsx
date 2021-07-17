@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, XAxis, YAxis, Line } from 'recharts';
+import { LineChart, XAxis, YAxis, Line, Tooltip } from 'recharts';
 
 interface Props {
 	title?: string;
@@ -10,6 +10,11 @@ interface Props {
 export const Graph = (props: Props) => {
 	const { title, data, lines } = props;
 	const colors = ['#8884d8', '#82ca9d'];
+
+	const keyNameMapping: { [key: string]: string } = {
+		totalValue: 'Total value',
+		cashAdded: 'Cash added',
+	};
 
 	return (
 		<>
@@ -24,11 +29,22 @@ export const Graph = (props: Props) => {
 					dataKey='date'
 					type='number'
 					domain={['0', 'dataMax']}
-					tickFormatter={(date) => new Date(date).toLocaleDateString()}
+					tickFormatter={date => new Date(date).toLocaleDateString()}
+				/>
+				<Tooltip
+					cursor={false}
+					labelFormatter={date => new Date(date).toLocaleDateString()}
+					wrapperStyle={{ zIndex: 10000 }}
 				/>
 				<YAxis />
 				{lines.map((l, i) => (
-					<Line key={l} type='monotone' dataKey={l} stroke={colors[i]} />
+					<Line
+						key={l}
+						type='monotone'
+						dataKey={l}
+						stroke={colors[i]}
+						name={keyNameMapping[l]}
+					/>
 				))}
 			</LineChart>
 		</>
